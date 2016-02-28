@@ -42,7 +42,7 @@ class MoviesController < ApplicationController
 
   def update
     @movie = Movie.find params[:id]
-    @movie.update_attributes!(movie_params)
+    @movie._update_attributes!(movie_params)
     flash[:notice] = "#{@movie.title} was successfully updated."
     redirect_to movie_path(@movie)
   end
@@ -52,6 +52,63 @@ class MoviesController < ApplicationController
     @movie.destroy
     flash[:notice] = "Movie '#{@movie.title}' deleted."
     redirect_to movies_path
+  end
+  
+  def upd
+  end
+  
+  def upd_act
+    movie = params[:movie]
+    @movie = Movie.find_by_title(movie["chk"])
+    if @movie==nil
+      flash[:notice] = "Movie #{movie["chk"]} not found"
+      redirect_to upd_movies_path
+    else
+      if movie["title"] !=""
+        @movie.title = movie["title"]
+      end
+      if movie["rating"] !=""
+        @movie.rating = movie["rating"]
+      end
+      # odate = @movie.release_date
+      if movie["release_date(1i)"] !=""
+        y = movie["release_date(1i)"].to_i
+        @movie.release_date.change(year: y)
+      end
+      if movie["release_date(2i)"] !=""
+        m=movie["release_date(2i)"].to_i
+        @movie.release_date.change(month: m)
+      end
+      if movie["release_date(3i)"] !=""
+        d=movie["release_date(3i)"].to_i
+        @movie.release_date.change(day: d)
+      end
+      @movie.save!
+      flash[:notice] = "Movie #{movie["title"]} updated"
+      redirect_to movies_path
+    end
+  end
+
+  def mov_del
+    movie = params[:movie]
+    if movie["title"] !=""
+      @movie = Movie.find_by_title(movie["title"])
+      @movie.destroy
+      flash[:notice] = "Movie '#{@movie.title}' deleted."
+    end
+    
+    if movie["rating"] != ""
+      @movie = Movie.find_by_rating(movie["rating"])
+      while @movie != nil
+        @movie.destroy
+        flash[:notice] = "Movie '#{@movie.title}' deleted."
+        @movie = Movie.find_by_rating(movie["rating"])
+      end
+    end
+    redirect_to movies_path
+  end
+
+  def delete
   end
 
 end
