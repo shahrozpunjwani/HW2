@@ -9,11 +9,23 @@ class MoviesController < ApplicationController
     @movie = Movie.find(id) # look up movie by unique ID
     # will render app/views/movies/show.<extension> by default
   end
-
+    
   def index
-    @movies = Movie.all
+    type = params[:sort]
+    if not type
+      @movies=Movie.all
+    else
+      if type =="bT"
+        @movies=Movie.order(:title)
+        @tClass = "hilite"
+      else
+        @movies=Movie.order(:release_date)
+        @rClass = "hilite"
+      end
+    end
   end
-
+  
+  
   def new
     # default: render 'new' template
   end
