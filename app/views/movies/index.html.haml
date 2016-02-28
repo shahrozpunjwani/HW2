@@ -15,7 +15,7 @@
         %td= movie.rating
         %td= movie.release_date
         %td= link_to "More about #{movie.title}", movie_path(movie)
-
+        
 = link_to 'Add new movie', new_movie_path
 = link_to 'Update movie' , upd_movies_path
 = link_to 'Delete Movies' , del_page_path
