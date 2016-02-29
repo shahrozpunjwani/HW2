@@ -11,6 +11,13 @@ class MoviesController < ApplicationController
   end
     
   def index
+    @all_ratings = Movie.all_ratings
+    ratings = params[:ratings]
+    if ratings != nil
+      keys = ratings.keys
+      @movies = Movie.where(rating: keys)
+    
+    end
     type = params[:sort]
     if not type
       @movies=Movie.all
@@ -22,7 +29,17 @@ class MoviesController < ApplicationController
         @movies=Movie.order(:release_date)
         @rClass = "hilite"
       end
+    
     end
+    
+    # if params[:ratings]
+    #   h1 = params[:ratings]
+    #   h1.each do |k,v|
+    #     h = Movie.find_by_rating(k)
+    #     @movies=h
+    #   end
+    # end
+        
   end
   
   
